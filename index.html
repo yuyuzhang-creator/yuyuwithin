@@ -1,73 +1,398 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<title>English OS Mobile</title>
-<style>
-:root{--bg:#f7f4fb;--card:#fff;--ink:#24212a;--muted:#78717d;--line:#e9e1ee;--accent:#71558c;--soft:#eee6f4}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:90px}
-.app{max-width:680px;margin:auto;padding:20px 16px}.page{display:none}.page.active{display:block}
-.eyebrow{font-size:11px;letter-spacing:.12em;color:var(--muted);font-weight:700}h1{font-size:28px;line-height:1.15;margin:7px 0 8px}.sub{font-size:14px;color:var(--muted);line-height:1.5}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:16px 0}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 5px 18px rgba(70,50,80,.04)}
-.metric{font-weight:800;font-size:24px;margin-top:4px}.label{font-size:11px;color:var(--muted)}h2{font-size:20px}
-.btn{width:100%;border:0;border-radius:15px;padding:14px;background:var(--accent);color:#fff;font-size:15px;font-weight:750}.secondary{background:var(--soft);color:var(--accent)}
-textarea{width:100%;min-height:170px;border:1px solid var(--line);border-radius:16px;padding:15px;font:inherit;font-size:16px;background:#fff;resize:none;outline:none}
-.rec{margin-top:12px}.exp{font-size:18px;font-weight:800}.score{font-size:22px;font-weight:850}.meta{font-size:12px;color:var(--muted);line-height:1.5;margin-top:5px}.tag{display:inline-block;padding:5px 9px;border-radius:99px;background:#f1edf4;margin:8px 5px 0 0;font-size:11px}
-.item{padding:14px 0;border-bottom:1px solid var(--line)}.progress{height:7px;border-radius:99px;background:#eee8f1;overflow:hidden;margin-top:10px}.progress i{display:block;height:100%;background:var(--accent)}
-.row{display:flex;gap:8px}.row .btn{flex:1}.answer{margin-top:12px;padding:13px;background:#f7f3fa;border-radius:14px;font-size:14px;line-height:1.5}.hidden{display:none}
-.bottom{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.95);backdrop-filter:blur(18px);border-top:1px solid var(--line);padding:8px 10px calc(8px + env(safe-area-inset-bottom))}
-.bottom-inner{max-width:680px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr)}.nav{border:0;background:transparent;padding:9px 4px;color:#8a838e;font-size:11px;font-weight:650}.nav b{display:block;font-size:20px;margin-bottom:2px}.nav.active{color:var(--accent)}
-.notice{font-size:12px;line-height:1.5;padding:11px 12px;background:#f0ebf5;border-radius:13px;color:#5f526b;margin-top:12px}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#F7F4EE" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="English Coach" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <title>English Coach v1</title>
+  <style>
+    :root{
+      --bg:#F7F4EE; --card:#FFFEFB; --ink:#17233A; --muted:#778097;
+      --line:#E4E0D8; --lav:#DDD7F3; --lav2:#EEEAF9; --gold:#D8C29A;
+      --green:#DDEADF; --amber:#F1E4C8; --rose:#F0DADA; --shadow:0 12px 35px rgba(23,35,58,.08);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+    button,input,textarea{font:inherit}
+    button{color:inherit}
+    .app{max-width:460px;min-height:100vh;margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 18px calc(90px + env(safe-area-inset-bottom))}
+    .screen{display:none}.screen.active{display:block}
+    .eyebrow{font-size:11px;letter-spacing:.14em;font-weight:800;color:var(--muted);text-transform:uppercase}
+    h1,h2,h3,p{margin:0}.h1{font-size:29px;line-height:1.12;letter-spacing:-.035em;font-weight:780}.h2{font-size:22px;line-height:1.18;letter-spacing:-.025em;font-weight:760}
+    .muted{color:var(--muted)}.small{font-size:13px;line-height:1.5}.body{font-size:15px;line-height:1.55}
+    .topline{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+    .avatar{width:36px;height:36px;border-radius:50%;background:var(--lav);display:grid;place-items:center;font-weight:800}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow)}
+    .soft{background:var(--lav2);border-radius:20px;padding:18px}.plain{padding:16px 0;border-top:1px solid var(--line)}
+    .primary{width:100%;min-height:50px;border:0;border-radius:15px;background:var(--ink);color:white;font-weight:760;padding:0 16px}
+    .secondary{width:100%;min-height:48px;border:1px solid var(--line);border-radius:15px;background:var(--card);font-weight:720;padding:0 16px}
+    .ghost{border:0;background:transparent;padding:10px 0;font-weight:700}
+    .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:rgba(255,255,255,.55);border-radius:999px;padding:6px 10px;font-size:12px}
+    .chips{display:flex;flex-wrap:wrap;gap:8px}.gap12{display:grid;gap:12px}.gap16{display:grid;gap:16px}.gap20{display:grid;gap:20px}.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt20{margin-top:20px}.mt24{margin-top:24px}.mt28{margin-top:28px}
+    .progress{height:7px;border-radius:999px;background:#E6E1D9;overflow:hidden}.progress span{display:block;height:100%;background:var(--ink);border-radius:999px}
+    .nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(460px,100%);padding:10px 18px calc(10px + env(safe-area-inset-bottom));background:rgba(247,244,238,.94);backdrop-filter:blur(14px);border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;z-index:20}
+    .nav button{border:0;background:transparent;min-height:48px;border-radius:14px;font-size:12px;color:var(--muted);font-weight:700}.nav button.active{background:var(--card);color:var(--ink);box-shadow:0 4px 18px rgba(23,35,58,.07)}
+    .field{width:100%;border:1px solid var(--line);border-radius:15px;background:var(--card);padding:13px 14px;color:var(--ink);outline:none}.field:focus{border-color:#B7ACD7;box-shadow:0 0 0 3px rgba(183,172,215,.18)}
+    textarea.field{min-height:120px;resize:vertical;line-height:1.5}
+    .steps{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-top:16px}.steps span{height:5px;border-radius:999px;background:#E5E0D8}.steps span.on{background:var(--ink)}
+    .feedback{border-radius:18px;padding:15px}.ready{background:var(--green)}.almost{background:var(--amber)}.review{background:var(--rose)}
+    .feedbackGrid{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:start}.tag{font-size:11px;font-weight:800;letter-spacing:.06em}
+    .metric{padding:15px 0;border-top:1px solid var(--line)}.metric:first-child{border-top:0}.metricHead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}.score{font-size:28px;line-height:1;font-weight:800;letter-spacing:-.04em}.trend{font-size:12px;font-weight:800}
+    .evidence{margin:9px 0 0;padding-left:18px;color:var(--muted);font-size:13px;line-height:1.5}.evidence li+li{margin-top:3px}
+    .bigPrompt{font-size:20px;line-height:1.38;font-weight:720;letter-spacing:-.015em}
+    .timer{font-variant-numeric:tabular-nums;font-size:34px;font-weight:760;letter-spacing:-.03em}
+    .recordDot{width:10px;height:10px;border-radius:50%;background:#BB4E55;display:inline-block;margin-right:7px}.pulse{animation:pulse 1.2s infinite}@keyframes pulse{50%{opacity:.35}}
+    .hidden{display:none!important}.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.divider{height:1px;background:var(--line);margin:18px 0}
+    .materialBtn{width:100%;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:18px;padding:16px;box-shadow:none}
+    .iconBox{width:36px;height:36px;border-radius:11px;background:var(--lav2);display:grid;place-items:center;flex:0 0 auto}
+    .listItem{display:flex;gap:12px;align-items:flex-start}
+    .status{font-size:12px;font-weight:800;border-radius:999px;padding:5px 9px;background:var(--lav2)}
+    .notice{font-size:12px;line-height:1.45;color:var(--muted);background:#F2EEE7;border-radius:14px;padding:11px 12px}
+    .switchRow{display:flex;align-items:center;justify-content:space-between;gap:12px}.switch{appearance:none;width:44px;height:26px;border-radius:999px;background:#D8D4CC;position:relative;transition:.2s}.switch:checked{background:var(--ink)}.switch:after{content:"";position:absolute;width:20px;height:20px;border-radius:50%;background:white;left:3px;top:3px;transition:.2s}.switch:checked:after{transform:translateX(18px)}
+    @media (max-width:360px){.h1{font-size:26px}.bigPrompt{font-size:18px}}
+  </style>
 </head>
 <body>
-<main class="app">
-<section id="home" class="page active">
-<div class="eyebrow">PERSONAL ENGLISH OS</div><h1>把看到的英语，变成你会用的英语。</h1><p class="sub">每天只练最值得主动掌握的表达。</p>
-<div class="cards"><div class="card"><div class="label">已收藏</div><div class="metric" id="saved">0</div></div><div class="card"><div class="label">待复习</div><div class="metric" id="due">0</div></div><div class="card"><div class="label">已掌握</div><div class="metric" id="mastered">0</div></div></div>
-<div class="card"><div class="eyebrow">TODAY</div><h2>5 分钟主动调用</h2><p class="sub">目标不是“认识”，而是在真实场景里能自己说出来。</p><button class="btn" onclick="go('practice')">开始今天的练习</button></div>
-</section>
+<div class="app">
+  <section id="today" class="screen active">
+    <div class="topline"><div><div class="eyebrow" id="todayDate">Today</div><div class="h1 mt8">Good morning, Yuyu.</div></div><div class="avatar">Y</div></div>
+    <div class="soft">
+      <div class="eyebrow">Now · Morning Review</div>
+      <div class="h2 mt8">Turn yesterday's weak points into active English.</div>
+      <p class="small muted mt8">Recall first. Verify. Use it again. Let the Coach decide what returns tonight.</p>
+      <div class="chips mt16"><span class="chip">3 key issues</span><span class="chip">6 expressions</span><span class="chip">10 recall prompts</span></div>
+      <button class="primary mt20" data-go="morning">Start Morning Review</button>
+    </div>
 
-<section id="capture" class="page">
-<h1>输入素材</h1><p class="sub">粘贴工作邮件、聊天、字幕或你看到的好表达。</p>
-<textarea id="source">Please find attached the CSC Exotic submission for March, including the revised version of the February submission and the new submissions for March.
-Going forward, please loop me in on any CSC-related submissions.
-Thank you for your support.</textarea>
-<div style="height:10px"></div><button class="btn" onclick="extract()">帮我挑值得学的表达</button>
-<div class="notice">当前是体验版，先用示例规则模拟 AI 提取，重点测试学习流程是否顺手。</div><div id="results"></div>
-</section>
+    <div class="plain mt24">
+      <div class="row"><div><div class="eyebrow">Tonight · ~35 min</div><div class="body" style="font-weight:760;margin-top:7px">Developing Low-tier CAs</div><div class="small muted mt8">Coach discussion · progression & capability development</div></div><button class="ghost" data-go="conversation">Preview →</button></div>
+    </div>
 
-<section id="library" class="page"><h1>我的表达库</h1><p class="sub">只留下真正会在工作和生活里用到的表达。</p><div class="card" id="libraryList"></div></section>
+    <div class="plain">
+      <div class="row"><div><div class="eyebrow">Current cycle</div><div class="body" style="font-weight:760;margin-top:7px">Session <span id="cycleNow">2</span> / 5</div></div><div class="status" id="cyclePct">40%</div></div>
+      <div class="progress mt12"><span id="cycleBar" style="width:40%"></span></div>
+    </div>
 
-<section id="practice" class="page"><h1>主动练习</h1><p class="sub">从“想得起来”逐渐走到“不提醒也会自然使用”。</p><div class="card" id="practiceBox"></div></section>
-</main>
+    <div class="plain">
+      <div class="row"><div><div class="eyebrow">Quick input</div><div class="body" style="font-weight:760;margin-top:7px">Something useful for your Coach?</div></div><button class="ghost" data-go="material">＋ Add</button></div>
+    </div>
+  </section>
 
-<nav class="bottom"><div class="bottom-inner">
-<button class="nav active" data-page="home"><b>⌂</b>首页</button>
-<button class="nav" data-page="capture"><b>＋</b>输入</button>
-<button class="nav" data-page="library"><b>▤</b>表达库</button>
-<button class="nav" data-page="practice"><b>◉</b>练习</button>
-</div></nav>
+  <section id="morning" class="screen">
+    <button class="ghost" data-go="today">← Today</button>
+    <div class="eyebrow mt8">Morning Review · 30 min</div>
+    <div class="h1 mt8">Recall before you read.</div>
+    <p class="body muted mt8">Your answer is checked for meaning, grammar, naturalness and work-context fit.</p>
+    <div class="steps"><span class="on"></span><span></span><span></span><span></span><span></span><span></span></div>
+
+    <div id="m1" class="mt24">
+      <div class="card">
+        <div class="eyebrow">1 · Active Recall</div>
+        <div class="bigPrompt mt12">Yesterday you overused “different kinds of”. Give 3 better ways to express variety in a business context.</div>
+        <textarea id="recallAnswer" class="field mt16" placeholder="Type what you can remember..."></textarea>
+        <button id="verifyRecall" class="primary mt16">Verify my recall</button>
+      </div>
+    </div>
+
+    <div id="m2" class="mt16 hidden">
+      <div id="recallFeedback" class="feedback almost"></div>
+      <button class="secondary mt12" id="continueCompare">Compare & Learn</button>
+    </div>
+
+    <div id="m3" class="mt16 hidden">
+      <div class="card">
+        <div class="eyebrow">3 · Compare & Learn</div>
+        <p class="body mt12">Don't memorize a list. Match each expression to a business situation.</p>
+        <div class="gap12 mt16">
+          <div><b>different CA tiers</b><div class="small muted">Use when capability or role level matters.</div></div>
+          <div><b>a range of resources</b><div class="small muted">Use when describing support options or allocation.</div></div>
+          <div><b>various clienteling approaches</b><div class="small muted">Use for methods or ways of working.</div></div>
+          <div><b>different levels of capability</b><div class="small muted">Use for development-stage differences.</div></div>
+        </div>
+        <button id="startProduce" class="primary mt20">Use them in context</button>
+      </div>
+    </div>
+
+    <div id="m4" class="mt16 hidden">
+      <div class="card">
+        <div class="eyebrow">4 · Produce</div>
+        <div class="bigPrompt mt12">不同能力层级的 CA 应该获得不同类型的资源，同时 KPI 也不应该完全相同。</div>
+        <p class="small muted mt12">Avoid “different kinds of” and “that's why”. Try one more precise expression + one transition.</p>
+        <textarea id="produceAnswer" class="field mt16" placeholder="Write or dictate your answer in English..."></textarea>
+        <button id="verifyProduce" class="primary mt16">Get Coach feedback</button>
+      </div>
+    </div>
+
+    <div id="m5" class="mt16 hidden">
+      <div id="produceFeedback" class="feedback almost"></div>
+      <button id="finishMorning" class="primary mt12">Finish Morning Review</button>
+    </div>
+
+    <div id="m6" class="mt16 hidden">
+      <div class="soft">
+        <div class="eyebrow">6 · Revisit</div>
+        <div class="h2 mt8">This will come back later.</div>
+        <p class="body muted mt8">Your Coach will quietly create a chance to reuse today's language in a later review and tonight's conversation.</p>
+        <button class="secondary mt16" data-go="today">Back to Today</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="conversation" class="screen">
+    <button class="ghost" data-go="today">← Today</button>
+    <div class="eyebrow mt8">Tonight's Conversation</div>
+    <div class="h1 mt8">Developing Low-tier CAs</div>
+    <p class="body muted mt8">Based on your real CSC clienteling context.</p>
+
+    <div class="soft mt24">
+      <div class="eyebrow">Coach angle</div>
+      <div class="bigPrompt mt12">How can CSC accelerate CA development without forcing every tier into the same clienteling model?</div>
+    </div>
+
+    <div class="mt24">
+      <div class="eyebrow">Quiet focus</div>
+      <div class="chips mt12"><span class="chip">Fluency</span><span class="chip">Expression Range</span><span class="chip">Logical Transitions</span></div>
+      <p class="small muted mt12">Your train of thought comes first. The Coach only interrupts if meaning breaks down.</p>
+    </div>
+
+    <div id="convReady" class="mt24"><button id="startConversation" class="primary">Start Conversation</button></div>
+
+    <div id="convLive" class="hidden mt24">
+      <div class="card">
+        <div class="row"><div><span class="recordDot pulse"></span><b>Conversation in progress</b></div><div class="timer" id="timer">00:00</div></div>
+        <div class="divider"></div>
+        <div class="eyebrow">Coach</div>
+        <div id="coachPrompt" class="bigPrompt mt12">Why do you think it takes one to two years for a lower-tier CA to become strong at clienteling?</div>
+        <textarea id="convInput" class="field mt16" placeholder="Speak or type your answer here..."></textarea>
+        <div class="row mt12"><button id="dictateBtn" class="secondary" style="width:auto;flex:1">🎙 Dictate</button><button id="nextPrompt" class="secondary" style="width:auto;flex:1">Next question</button></div>
+        <button id="endConversation" class="primary mt12">Finish Session</button>
+      </div>
+      <div id="speechNotice" class="notice mt12">Voice dictation uses your browser's speech recognition when available. If it is unavailable, type your answer instead.</div>
+    </div>
+
+    <div id="convReport" class="hidden mt24">
+      <div class="card">
+        <div class="eyebrow">Session Complete</div>
+        <div class="h2 mt8">Today's 3 priorities</div>
+        <div id="sessionReport" class="gap16 mt20"></div>
+        <div class="divider"></div>
+        <div class="eyebrow">Tomorrow Morning</div>
+        <div class="body mt8"><b>2 recurring issues · 3 expressions · 6 recall challenges</b></div>
+        <p class="small muted mt8">Review prepared ✓</p>
+        <button class="primary mt16" data-go="today">Done for today</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="progress" class="screen">
+    <div class="eyebrow">Progress · Cycle 1</div>
+    <div class="h1 mt8">Your speaking profile</div>
+    <p class="body muted mt8">Four indicators stay visible. Other signals are tracked quietly unless they become a bottleneck.</p>
+
+    <div class="card mt24" id="metricsCard"></div>
+
+    <div class="soft mt16">
+      <div class="eyebrow">Current Priority</div>
+      <div class="h2 mt8">Expression Range</div>
+      <p class="body muted mt8">Reduce safe-expression repetition without slowing down your thinking.</p>
+    </div>
+
+    <div class="card mt16">
+      <div class="row"><div><div class="eyebrow">5-session cycle</div><div class="body mt8"><b><span id="progressSession">2</span> / 5 Sessions</b></div></div><div class="status" id="progressPct">40%</div></div>
+      <div class="progress mt12"><span id="progressBar" style="width:40%"></span></div>
+      <p class="small muted mt12">After Session 5, the Coach compares trends, explains the evidence and sets the next learning focus.</p>
+    </div>
+  </section>
+
+  <section id="material" class="screen">
+    <button class="ghost" data-go="today">← Today</button>
+    <div class="eyebrow mt8">Add Material</div>
+    <div class="h1 mt8">Give your Coach more context.</div>
+    <p class="body muted mt8">You add it. The Coach decides whether it should enter your learning plan now.</p>
+
+    <div class="gap12 mt24">
+      <button class="materialBtn" data-material="text"><div class="listItem"><div class="iconBox">📄</div><div><b>Paste / Upload</b><div class="small muted mt8">Email · PPT text · article · document</div></div></div></button>
+      <button class="materialBtn" data-material="link"><div class="listItem"><div class="iconBox">🎬</div><div><b>Video / Link</b><div class="small muted mt8">YouTube · webpage · learning resource</div></div></div></button>
+      <button class="materialBtn" data-material="quick"><div class="listItem"><div class="iconBox">✍️</div><div><b>Quick Capture</b><div class="small muted mt8">Word · phrase · sentence · quick work context</div></div></div></button>
+    </div>
+
+    <div id="materialForm" class="card mt16 hidden">
+      <div class="eyebrow" id="materialTitle">Quick Capture</div>
+      <textarea id="materialInput" class="field mt12" placeholder="Paste or type here..."></textarea>
+      <input id="materialLink" class="field mt12 hidden" type="url" placeholder="https://..." />
+      <button id="saveMaterial" class="primary mt16">Add to my learning world</button>
+    </div>
+
+    <div id="materialResult" class="hidden mt16"></div>
+
+    <div class="plain mt24">
+      <div class="eyebrow">Work Context already in your Coach</div>
+      <div class="chips mt12"><span class="chip">CSC Clienteling</span><span class="chip">QR Code</span><span class="chip">Deepreach / HIPO</span><span class="chip">WeCom</span><span class="chip">CA Development</span><span class="chip">TP Management</span><span class="chip">Central PPT</span><span class="chip">VIC / VVIC</span></div>
+    </div>
+  </section>
+
+  <section id="settings" class="screen">
+    <button class="ghost" data-go="today">← Today</button>
+    <div class="eyebrow mt8">Prototype Settings</div>
+    <div class="h1 mt8">How this version works</div>
+    <div class="card mt24 gap16">
+      <div class="switchRow"><div><b>Local progress memory</b><div class="small muted mt8">Stored on this device with localStorage.</div></div><input class="switch" type="checkbox" checked disabled /></div>
+      <div class="divider"></div>
+      <div><b>AI verification</b><div class="small muted mt8">This prototype uses local rule-based checks so you can test the learning flow. A production version should call a secure AI backend for true open-ended feedback.</div></div>
+      <div class="divider"></div>
+      <div><b>Voice conversation</b><div class="small muted mt8">Browser dictation is supported when available. True two-way GPT voice requires a secure backend/realtime connection.</div></div>
+    </div>
+  </section>
+</div>
+
+<nav class="nav">
+  <button class="active" data-go="today">Today</button>
+  <button data-go="progress">Progress</button>
+  <button data-go="material">＋ Material</button>
+</nav>
 
 <script>
-const demo=[
-{id:"loop",exp:"loop someone in on something",score:94,fn:"让某人持续参与 / 同步信息",reason:"非常适合跨团队协作、邮件和会议，而且与你的工作场景高度相关。",pattern:"loop + someone + in on + something",example:"Could you loop Alex in on the discussion?",stage:0,next:Date.now()},
-{id:"forward",exp:"Going forward, ...",score:82,fn:"提出未来方向或后续安排",reason:"适合邮件、会议和 presentation，用于自然引出未来动作。",pattern:"Going forward, + future action",example:"Going forward, we'll review the results weekly.",stage:0,next:Date.now()}
-];
-let db=JSON.parse(localStorage.getItem("englishOSMobile")||"[]");
-function save(){localStorage.setItem("englishOSMobile",JSON.stringify(db));render()}
-function go(id){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav").forEach(x=>x.classList.toggle("active",x.dataset.page===id));window.scrollTo(0,0);render()}
-document.querySelectorAll(".nav").forEach(x=>x.onclick=()=>go(x.dataset.page));
-function extract(){results.innerHTML='<h2 style="margin-top:22px">推荐学习 2 条</h2>'+demo.map(x=>`<div class="card rec"><div style="display:flex;justify-content:space-between;gap:10px"><div class="exp">${x.exp}</div><div class="score">${x.score}</div></div><div class="meta">${x.fn}</div><span class="tag">Learning Value ${x.score}/100</span><p style="font-size:14px;line-height:1.55">${x.reason}</p><button class="btn" onclick="add('${x.id}')">${db.some(a=>a.id===x.id)?'已收藏':'收藏并开始学习'}</button></div>`).join("")}
-function add(id){let x=demo.find(a=>a.id===id);if(!db.some(a=>a.id===id))db.push({...x});save();go("library")}
-function render(){saved.textContent=db.length;due.textContent=db.filter(x=>x.next<=Date.now()).length;mastered.textContent=db.filter(x=>x.stage>=5).length;
-libraryList.innerHTML=db.length?db.map(x=>`<div class="item"><div style="display:flex;justify-content:space-between;gap:8px"><div class="exp">${x.exp}</div><span class="tag">Stage ${x.stage}</span></div><div class="meta">${x.fn}</div><div style="font-size:14px;margin-top:9px"><b>Pattern</b><br>${x.pattern}</div><div class="progress"><i style="width:${x.stage/5*100}%"></i></div></div>`).join(""):'<div class="meta">还没有收藏。先去「输入」试一下示例邮件。</div>';practice()}
-function practice(){if(!db.length){practiceBox.innerHTML='<div class="meta">先收藏一个表达，我才能给你出题。</div><div style="height:12px"></div><button class="btn" onclick="go(\'capture\')">去输入素材</button>';return}
-let x=db.find(a=>a.next<=Date.now())||db[0];let p=[`先看表达：<b>${x.exp}</b><br><br>想一下你会在什么场景使用它？`,`不要照抄原句。请自己用 <b>${x.exp}</b> 写一句工作场景英文。`,`场景：同事正在和另一个团队推进项目，你希望之后的沟通也把你加入进来。你会怎么说？`,`换一个新的工作情景，自然使用 <b>${x.exp}</b>。`,`用 3–5 句英文讲一个工作项目，并把这个表达自然放进去。`,`最终测试：不显示目标表达，在适合的场景下自然调用它。`];
-practiceBox.innerHTML=`<div class="eyebrow">STAGE ${x.stage}</div><h2>${p[Math.min(5,x.stage)]}</h2><textarea placeholder="直接在这里输入你的回答…"></textarea><div id="ref" class="answer hidden"><b>参考：</b><br>${x.example}</div><div style="height:10px"></div><button class="btn secondary" onclick="ref.classList.remove('hidden')">看参考表达</button><div style="height:9px"></div><div class="row"><button class="btn secondary" onclick="rate('${x.id}','fail')">没想起来</button><button class="btn secondary" onclick="rate('${x.id}','partial')">勉强</button><button class="btn" onclick="rate('${x.id}','pass')">自然说出</button></div>`}
-function rate(id,r){let x=db.find(a=>a.id===id),d=86400000,g=[1,3,7,14,30,60];if(r==="pass")x.stage=Math.min(5,x.stage+1);if(r==="fail")x.stage=Math.max(0,x.stage-1);x.next=Date.now()+g[x.stage]*d;save()}
-render()
+(() => {
+  const qs=(s)=>document.querySelector(s), qsa=(s)=>[...document.querySelectorAll(s)];
+  const state = JSON.parse(localStorage.getItem('englishCoachV1')||'null') || {
+    session:2,
+    metrics:{fluency:6.5, expression:6.0, coherence:7.0, business:7.0},
+    materials:[], morningDone:false
+  };
+  const save=()=>localStorage.setItem('englishCoachV1',JSON.stringify(state));
+  const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+  const pct=()=>Math.round((state.session/5)*100);
+  const today=new Date(); qs('#todayDate').textContent=today.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'});
+
+  function renderCycle(){
+    ['#cycleNow','#progressSession'].forEach(id=>qs(id).textContent=state.session);
+    ['#cyclePct','#progressPct'].forEach(id=>qs(id).textContent=pct()+'%');
+    ['#cycleBar','#progressBar'].forEach(id=>qs(id).style.width=pct()+'%');
+  }
+  function renderMetrics(){
+    const items=[
+      ['Fluency','Continuity · pauses · self-repair',state.metrics.fluency,['Longer uninterrupted answers','Still reorganizing some sentences under pressure']],
+      ['Expression Range','Variety · active vocabulary',state.metrics.expression,['New work-specific expressions are entering use','Generic safe phrases still repeat too often']],
+      ['Coherence','Structure · transitions · development',state.metrics.coherence,['Strong progression logic','Transitions are becoming more flexible']],
+      ['Business Communication','Precision · professionalism · response',state.metrics.business,['Strong familiar-domain reasoning','Need faster response to unfamiliar follow-ups']]
+    ];
+    qs('#metricsCard').innerHTML=items.map(([name,sub,score,evidence])=>`<div class="metric"><div class="metricHead"><div><b>${name}</b><div class="small muted mt8">${sub}</div></div><div class="score">${score.toFixed(1)}</div></div><div class="progress mt12"><span style="width:${score*10}%"></span></div><ul class="evidence">${evidence.map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('');
+  }
+  renderCycle(); renderMetrics();
+
+  function go(id){qsa('.screen').forEach(x=>x.classList.toggle('active',x.id===id));qsa('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.go===id));window.scrollTo({top:0,behavior:'smooth'});}
+  qsa('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+
+  function scoreRecall(text){
+    const t=text.toLowerCase();
+    const hits=[/tiers?/,/range of/,/various/,/levels? of/,/approaches?/,/segments?/].filter(r=>r.test(t)).length;
+    const bad=/different kinds of/.test(t);
+    if(hits>=3 && !bad) return {status:'Ready',cls:'ready',detail:'You retrieved several precise alternatives without falling back on the old phrase.'};
+    if(hits>=1) return {status:'Almost',cls:'almost',detail:'You remembered the core idea. Now make the alternatives more context-specific and automatic.'};
+    return {status:'Review',cls:'review',detail:'The concept has not become easy to retrieve yet. Compare the options, then use them immediately.'};
+  }
+  qs('#verifyRecall').addEventListener('click',()=>{
+    const text=qs('#recallAnswer').value.trim(); if(!text){alert('Write what you can remember first.');return;}
+    const r=scoreRecall(text); const box=qs('#recallFeedback'); box.className='feedback '+r.cls;
+    box.innerHTML=`<div class="feedbackGrid"><div><div class="tag">${r.status.toUpperCase()}</div><div class="body mt8"><b>Recall check</b></div><div class="small mt8">${r.detail}</div></div><div class="status">${r.status==='Ready'?'✓':r.status==='Almost'?'△':'○'}</div></div>`;
+    qs('#m2').classList.remove('hidden');
+  });
+  qs('#continueCompare').addEventListener('click',()=>qs('#m3').classList.remove('hidden'));
+  qs('#startProduce').addEventListener('click',()=>qs('#m4').classList.remove('hidden'));
+
+  function produceFeedback(text){
+    const t=text.toLowerCase();
+    const meaning=(/ca|tier/.test(t)&&/resource|support/.test(t)&&/kpi/.test(t));
+    const grammarBad=/need to tracking|have to tracking|can to |be able to tracking/.test(t);
+    const generic=/different kinds of|that's why/.test(t);
+    const precise=/aligned with|stage of development|levels? of support|range of resources|different ca tiers/.test(t);
+    const vals={meaning:meaning?'✓ Ready':'△ Almost',grammar:grammarBad?'○ Review':'✓ Ready',natural:generic?'△ Almost':(precise?'✓ Ready':'△ Almost'),context:precise?'✓ Ready':'△ Almost'};
+    let cls=(meaning&&!grammarBad&&precise&&!generic)?'ready':'almost';
+    let upgrade='Different CA tiers should receive different levels of support, and their KPIs should be aligned with their stage of development.';
+    return {vals,cls,upgrade};
+  }
+  qs('#verifyProduce').addEventListener('click',()=>{
+    const text=qs('#produceAnswer').value.trim(); if(!text){alert('Write your answer first.');return;}
+    const r=produceFeedback(text), box=qs('#produceFeedback'); box.className='feedback '+r.cls;
+    box.innerHTML=`<div class="eyebrow">Coach feedback</div><div class="gap12 mt12"><div class="row"><span>Meaning</span><b>${r.vals.meaning}</b></div><div class="row"><span>Grammar</span><b>${r.vals.grammar}</b></div><div class="row"><span>Naturalness</span><b>${r.vals.natural}</b></div><div class="row"><span>Context Fit</span><b>${r.vals.context}</b></div></div><div class="divider"></div><div class="small muted">Today's upgrade</div><div class="body mt8"><b>${r.upgrade}</b></div>`;
+    qs('#m5').classList.remove('hidden');
+  });
+  qs('#finishMorning').addEventListener('click',()=>{state.morningDone=true;save();qs('#m6').classList.remove('hidden');});
+
+  // Conversation prototype
+  const prompts=[
+    'Why do you think it takes one to two years for a lower-tier CA to become strong at clienteling?',
+    'If you had to divide CA development into three stages, what would each stage focus on?',
+    'Should every CA tier be measured by the same KPIs? Why or why not?',
+    'What kind of support should managers provide at each stage?',
+    'If Central challenged your model, what evidence would you use to defend it?'
+  ];
+  let pIndex=0, seconds=0, timerInt=null, transcript=[];
+  function tick(){seconds++;qs('#timer').textContent=String(Math.floor(seconds/60)).padStart(2,'0')+':'+String(seconds%60).padStart(2,'0');}
+  qs('#startConversation').addEventListener('click',()=>{qs('#convReady').classList.add('hidden');qs('#convLive').classList.remove('hidden');timerInt=setInterval(tick,1000);});
+  qs('#nextPrompt').addEventListener('click',()=>{
+    const val=qs('#convInput').value.trim(); if(val) transcript.push(val); qs('#convInput').value=''; pIndex=Math.min(pIndex+1,prompts.length-1); qs('#coachPrompt').textContent=prompts[pIndex];
+  });
+  let recognition=null;
+  qs('#dictateBtn').addEventListener('click',()=>{
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    if(!SR){alert('Speech recognition is not available in this browser. Please type your answer.');return;}
+    if(recognition){try{recognition.stop()}catch(e){} recognition=null; qs('#dictateBtn').textContent='🎙 Dictate'; return;}
+    recognition=new SR(); recognition.lang='en-US'; recognition.interimResults=true; recognition.continuous=false;
+    let base=qs('#convInput').value;
+    recognition.onstart=()=>qs('#dictateBtn').textContent='■ Stop';
+    recognition.onresult=(e)=>{let s='';for(let i=e.resultIndex;i<e.results.length;i++)s+=e.results[i][0].transcript;qs('#convInput').value=(base+' '+s).trim();};
+    recognition.onend=()=>{recognition=null;qs('#dictateBtn').textContent='🎙 Dictate';}; recognition.start();
+  });
+  function analyzeSession(text){
+    const words=(text.match(/\b[\w'-]+\b/g)||[]); const wc=words.length; const lower=text.toLowerCase();
+    const safe=['different kinds of','make sure','that\'s why','for example'];
+    const repeated=safe.map(s=>[s,(lower.match(new RegExp(s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g'))||[]).length]).filter(x=>x[1]>0);
+    const transitions=['once they reach','from there','ultimately','as a result','which means','the first step','the key difference'];
+    const transitionHits=transitions.filter(x=>lower.includes(x)).length;
+    const grammarIssues=(lower.match(/need to tracking|have to tracking|can to |they will totally can|my main job is to tracking/g)||[]).length;
+    return {wc,repeated,transitionHits,grammarIssues};
+  }
+  qs('#endConversation').addEventListener('click',()=>{
+    const val=qs('#convInput').value.trim(); if(val) transcript.push(val); clearInterval(timerInt); qs('#convLive').classList.add('hidden');
+    const analysis=analyzeSession(transcript.join(' '));
+    const expStatus=analysis.repeated.length?'△ Almost':'✓ Ready'; const cohStatus=analysis.transitionHits>=2?'✓ Ready':'△ Almost'; const gramStatus=analysis.grammarIssues?'○ Review':'△ Almost';
+    qs('#sessionReport').innerHTML=`
+      <div><div class="row"><b>1 · Expression Range</b><span class="status">${expStatus}</span></div><div class="small muted mt8">${analysis.repeated.length?'Some safe expressions still repeated: '+analysis.repeated.map(x=>x[0]).join(', ')+'.':'Good variety in this session. Keep transferring newer work-specific language.'}</div></div>
+      <div><div class="row"><b>2 · Coherence</b><span class="status">${cohStatus}</span></div><div class="small muted mt8">${analysis.transitionHits>=2?'You used multiple structural transitions naturally.':'Your logic is clear, but transitions can become more automatic under pressure.'}</div></div>
+      <div><div class="row"><b>3 · Grammar Automation</b><span class="status">${gramStatus}</span></div><div class="small muted mt8">${analysis.grammarIssues?'A recurring verb-form pattern still needs review.':'No tracked baseline grammar pattern appeared, but this local prototype cannot fully assess grammar.'}</div></div>`;
+    // Gentle metric movement; session count advances.
+    state.metrics.fluency=clamp(state.metrics.fluency+(analysis.wc>120?.2:.05),0,10);
+    state.metrics.expression=clamp(state.metrics.expression+(analysis.repeated.length?0:.2),0,10);
+    state.metrics.coherence=clamp(state.metrics.coherence+(analysis.transitionHits>=2?.2:.05),0,10);
+    state.metrics.business=clamp(state.metrics.business+(analysis.wc>100?.1:.05),0,10);
+    state.session=Math.min(5,state.session+1); save(); renderCycle(); renderMetrics(); qs('#convReport').classList.remove('hidden');
+  });
+
+  // Materials
+  let materialType='quick';
+  qsa('[data-material]').forEach(b=>b.addEventListener('click',()=>{
+    materialType=b.dataset.material; qs('#materialForm').classList.remove('hidden'); qs('#materialResult').classList.add('hidden');
+    const titles={text:'Paste / Upload',link:'Video / Link',quick:'Quick Capture'}; qs('#materialTitle').textContent=titles[materialType];
+    qs('#materialLink').classList.toggle('hidden',materialType!=='link'); qs('#materialInput').placeholder=materialType==='quick'?'Add a phrase, sentence, or quick work context...':'Paste the useful content or notes here...';
+  }));
+  qs('#saveMaterial').addEventListener('click',()=>{
+    const content=qs('#materialInput').value.trim(); const link=qs('#materialLink').value.trim(); if(!content&&!link){alert('Add some content first.');return;}
+    const all=(content+' '+link).toLowerCase(); const high=/clienteling|central|qr code|hipo|deepreach|wecom|data|presentation|kpi|vic|vvic|ca /.test(all);
+    state.materials.unshift({type:materialType,content,link,date:Date.now(),priority:high?'Learn now':'Save for later'});save();
+    qs('#materialResult').className='feedback '+(high?'ready':'almost'); qs('#materialResult').innerHTML=`<div class="tag">${high?'USEFUL NOW · HIGH RELEVANCE':'SAVED FOR LATER'}</div><div class="body mt8"><b>${high?'Added to your learning queue.':'Useful, but not urgent for the current bottleneck.'}</b></div><div class="small mt8">${high?'The production Coach would extract transferable language and decide whether it belongs in Morning Review or a future Conversation.':'It stays in your learning world until it becomes relevant.'}</div>`;
+    qs('#materialResult').classList.remove('hidden'); qs('#materialInput').value=''; qs('#materialLink').value='';
+  });
+
+  // Hidden settings long-press-ish: tap avatar
+  qs('.avatar').addEventListener('click',()=>go('settings'));
+
+  if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
+})();
 </script>
-</body></html>
+</body>
+</html>
